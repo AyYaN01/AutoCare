@@ -76,7 +76,7 @@ const LoginScreen = () => {
       </TouchableOpacity>
 
       {/* Login Button */}
-      <TouchableOpacity className="bg-[#ef4444] py-4 rounded-lg mb-8">
+      <TouchableOpacity onPress={()=> router.push('../home')} className="bg-[#ef4444] py-4 rounded-lg mb-8">
         <Text className="text-center text-white text-base font-sfsemibold">
           Login
         </Text>

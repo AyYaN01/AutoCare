@@ -14,24 +14,28 @@ const TabLayout = () => {
       <Tabs.Screen 
           name="home"
           options={{
+            headerShown:false,
             title: "Home",
           }}
         />
         <Tabs.Screen
           name="location"
           options={{
+            headerShown:false,
             title: "Location"
           }}
         />
         <Tabs.Screen
           name="history"
           options={{
+            headerShown:false,
             title: "History"
           }}
         />
         <Tabs.Screen
           name="profile"
           options={{
+            headerShown:false,
             title: "Profile"
           }}
         />
