@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from "react-native";
 import { Feather, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import images from '../../assets/images';
+import { router } from "expo-router";
 
 
 const Home = () => {
@@ -74,6 +75,7 @@ const Home = () => {
             <TouchableOpacity
               key={service.key}
               className="bg-[#1e293b] rounded-lg w-[48%] mb-4 p-4"
+              onPress={()=> router.push('../services/repair')}
             >
               <MaterialCommunityIcons
                 name={service.icon}
