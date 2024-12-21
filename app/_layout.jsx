@@ -27,6 +27,10 @@ const RootLayout = () => {
      <Stack.Screen name='(auth)' options={{headerShown:false}}/>
      <Stack.Screen name='(tabs)' options={{headerShown:false}}/>
      <Stack.Screen name='services/repair' options={{headerShown:false}}/>
+     <Stack.Screen name='payment/payment' options={{headerShown:false}}/>
+     <Stack.Screen name='payment/digital' options={{headerShown:false}}/>
+     <Stack.Screen name='payment/addcard' options={{headerShown:false}}/>
+     <Stack.Screen name='payment/confirmpay' options={{headerShown:false}}/>
    </Stack>
   )
 }

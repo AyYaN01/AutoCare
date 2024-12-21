@@ -16,7 +16,7 @@ const SignUpScreen = () => {
   return (
     <View className="flex-1 bg-primary px-6 pt-12">
       {/* Header: Login & Sign Up Tabs */}
-      <View className="flex-row justify-center mb-10">
+      <View className="flex-row justify-center mb-10 pt-10">
         <TouchableOpacity 
           className="px-8 py-3 rounded-lg"
           onPress={()=> router.push('/sign-in')}

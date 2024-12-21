@@ -20,7 +20,7 @@ const LoginScreen = () => {
     <SafeAreaView className="flex-1 bg-primary px-6 pt-12">
       <ScrollView>
       {/* Toggle Header for Login and Signup */}
-      <View className="flex-row justify-center mb-10">
+      <View className="flex-row justify-center mb-10 pt-10">
         <TouchableOpacity className="bg-secondary px-8 py-3 rounded-lg" >
           <Text className="text-white text-lg font-sfsemibold">Login</Text>
         </TouchableOpacity>

@@ -1,25 +1,25 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { AntDesign, MaterialIcons, FontAwesome5, Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+import images from "../../assets/images";
 
 const RepairServiceScreen = () => {
   return (
     <View className="flex-1 bg-[#0F172A] px-4 pt-10">
       {/* Header */}
-      <View className="flex-row items-center mb-6">
-        <TouchableOpacity>
-          <AntDesign name="arrowleft" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text className="text-white text-xl font-semibold ml-4">Repair Service</Text>
+      <View className="flex-row items-center justify-between mb-4 pt-4">
+                    <TouchableOpacity>
+                      <AntDesign name="arrowleft" size={30} color="#FFFFFF" />
+                    </TouchableOpacity>
+                    <Text className="text-white text-3xl font-sfbold flex-1 text-center">Repair</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Service Image and Pricing */}
         <View className="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg mb-6">
           <Image
-            source={{
-              uri: "https://via.placeholder.com/300x150", // Replace with your image URL
-            }}
+            source={images.repair}
             className="w-full h-48"
             resizeMode="cover"
           />
@@ -84,7 +84,7 @@ const RepairServiceScreen = () => {
         </View>
 
         {/* Book Now Button */}
-        <TouchableOpacity className="bg-[#EF4444] rounded-lg py-4 shadow-lg">
+        <TouchableOpacity className="bg-secondary rounded-lg py-4 shadow-lg" onPress={()=> router.push('../payment/payment')}>
           <Text className="text-white text-center text-lg font-bold">Book Now</Text>
         </TouchableOpacity>
       </ScrollView>
