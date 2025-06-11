@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { router, Link } from "expo-router";
-import { auth } from "../firebaseConfig"; // 🔄 Adjust path if needed
+import { auth } from "../../firebaseconfig"; // 🔄 Adjust path if needed
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const { width } = Dimensions.get("window");
