@@ -5,11 +5,15 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
+<<<<<<< HEAD
   Alert,
+=======
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
+<<<<<<< HEAD
 import { auth } from "../../firebaseconfig"; // 🔄 Update path as needed
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
@@ -34,6 +38,11 @@ const SignUpScreen = () => {
       Alert.alert("Signup Error", error.message);
     }
   };
+=======
+
+const SignUpScreen = () => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
 
   return (
     <View className="flex-1 bg-primary px-6 pt-12">
@@ -41,7 +50,11 @@ const SignUpScreen = () => {
       <View className="flex-row justify-center mb-10 pt-10">
         <TouchableOpacity 
           className="px-8 py-3 rounded-lg"
+<<<<<<< HEAD
           onPress={() => router.push('/sign-in')}
+=======
+          onPress={()=> router.push('/sign-in')}
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
         >
           <Text className="text-gray-500 text-lg font-sfsemibold">Login</Text>
         </TouchableOpacity>
@@ -50,6 +63,10 @@ const SignUpScreen = () => {
         </TouchableOpacity>
       </View>
 
+<<<<<<< HEAD
+=======
+      {/* Title and Subtitle */}
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
       <Text className="text-center text-white text-2xl font-sfsemibold mb-2">
         Create an account
       </Text>
@@ -64,8 +81,11 @@ const SignUpScreen = () => {
           placeholder="User Name"
           placeholderTextColor="#737373"
           className="bg-[#1e293b] text-white rounded-lg px-4 py-3 h-16"
+<<<<<<< HEAD
           value={username}
           onChangeText={setUsername}
+=======
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
         />
       </View>
 
@@ -76,10 +96,13 @@ const SignUpScreen = () => {
           placeholder="Email"
           placeholderTextColor="#737373"
           className="bg-[#1e293b] text-white rounded-lg px-4 py-3 h-16"
+<<<<<<< HEAD
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+=======
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
         />
       </View>
 
@@ -92,9 +115,12 @@ const SignUpScreen = () => {
             placeholderTextColor="#737373"
             secureTextEntry={!isPasswordVisible}
             className="text-white flex-1"
+<<<<<<< HEAD
             value={password}
             onChangeText={setPassword}
             autoCapitalize="none"
+=======
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
           />
           <TouchableOpacity
             onPress={() => setIsPasswordVisible(!isPasswordVisible)}
@@ -109,7 +135,11 @@ const SignUpScreen = () => {
       </View>
 
       {/* Sign-Up Button */}
+<<<<<<< HEAD
       <TouchableOpacity onPress={handleSignUp} className="bg-secondary py-4 rounded-lg mb-8">
+=======
+      <TouchableOpacity className="bg-secondary py-4 rounded-lg mb-8">
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
         <Text className="text-center text-white text-base font-sfsemibold">
           Sign up
         </Text>
@@ -132,12 +162,20 @@ const SignUpScreen = () => {
         </TouchableOpacity>
       </View>
 
+<<<<<<< HEAD
       {/* Footer */}
+=======
+      {/* Footer: Already Have an Account */}
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
       <View className="flex-row justify-center">
         <Text className="text-gray-500 font-sfregular">
           Already Have an Account?{" "}
         </Text>
+<<<<<<< HEAD
         <TouchableOpacity onPress={() => router.push('/sign-in')}>
+=======
+        <TouchableOpacity onPress={()=> router.push('/sign-in')}>
+>>>>>>> 6113913c270dd4c9e25d6832af71b6cfbe97f2e8
           <Text className="text-secondary font-sfsemibold">Login</Text>
         </TouchableOpacity>
       </View>
