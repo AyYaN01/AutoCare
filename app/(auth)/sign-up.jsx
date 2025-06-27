@@ -10,7 +10,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { auth } from "../../firebaseconfig"; // 🔄 Update path as needed
+import { auth } from "../../firebaseconfig"; 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUpScreen = () => {
