@@ -24,10 +24,10 @@ const LoginScreen = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in");
-      router.push("../home"); // 🚀 Navigate to home on success
+      router.push("../home");
     } catch (error) {
       console.error("Login error:", error.message);
-      alert(error.message); // Show error to user
+      alert(error.message); 
     }
   };
 
