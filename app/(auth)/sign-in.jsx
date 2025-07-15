@@ -24,7 +24,7 @@ const LoginScreen = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in");
-      router.push("../home");
+      router.replace("../home");
     } catch (error) {
       console.error("Login error:", error.message);
       alert(error.message); 
