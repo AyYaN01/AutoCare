@@ -5,42 +5,67 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ActivityIndicator
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { auth, db } from "../../firebaseconfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import app from "../../firebaseconfig"; // Firebase initialization file
+
+// Initialize Firebase Auth
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 const SignUpScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // To handle loading state
+  const [error, setError] = useState(""); // To handle errors
 
   const handleSignUp = async () => {
-    if (!email || !password || !username) {
+    setError(""); // Reset error state
+    setLoading(true); // Start loading
+
+    // Check if username is already taken
+    const q = query(collection(db, "users"), where("username", "==", username));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      setError("Username already taken.");
+      setLoading(false);
+      return;
+    }
+
+    // Check if email and password are provided
+    if (!email || !password || !username || !username) {
       Alert.alert("Missing Info", "Please enter all fields");
+      setLoading(false);
       return;
     }
 
     try {
+      // Create user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save additional user info in Firestore
+      // Save extra user data in Firestore
       await setDoc(doc(db, "users", user.uid), {
         username: username,
         email: user.email,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
-      console.log("User signed up and data saved to Firestore");
+      // Navigate to home after signup
       router.push("/home");
+      alert("Sign up successful!");
     } catch (error) {
       console.error("Signup error:", error.message);
       Alert.alert("Signup Error", error.message);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -118,11 +143,19 @@ const SignUpScreen = () => {
         </View>
       </View>
 
-      {/* Submit */}
-      <TouchableOpacity onPress={handleSignUp} className="bg-secondary py-4 rounded-lg mb-8">
-        <Text className="text-center text-white text-base font-sfsemibold">
-          Sign up
-        </Text>
+      {/* Sign-Up Button */}
+      <TouchableOpacity 
+        onPress={handleSignUp} 
+        className="bg-secondary py-4 rounded-lg mb-8"
+        disabled={loading} // Disable the button while loading
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text className="text-center text-white text-base font-sfsemibold">
+            Sign up
+          </Text>
+        )}
       </TouchableOpacity>
 
       {/* Or separator */}
