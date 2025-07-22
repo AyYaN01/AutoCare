@@ -1,15 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, Switch, ScrollView } from "react-native";
 import { AntDesign, Feather, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { auth } from  "../../firebaseconfig"; // Make sure path is correct
+import { doc, getDoc } from "firebase/firestore";
+import { db } from  "../../firebaseconfig"; // Make sure path is correct
 
 const ProfileScreen = () => {
-  const [isNotificationEnabled, setIsNotificationEnabled] = React.useState(true);
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const toggleNotificationSwitch = () => setIsNotificationEnabled((previousState) => !previousState);
+  const toggleNotificationSwitch = () => setIsNotificationEnabled(prev => !prev);
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          setUsername(userDoc.data().username);
+        } else {
+          console.log("User document does not exist.");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsername();
+  }, []);
 
   return (
     <View className="flex-1 bg-primary px-1 pt-10">
-      {/* Header */}
       <View className="flex-row items-center mb-6">
         <TouchableOpacity>
           <AntDesign name="arrowleft" size={24} color="#FFFFFF" />
@@ -18,13 +46,14 @@ const ProfileScreen = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Profile Information */}
         <View className="items-center mb-6">
           <Image
-            source={{ uri: "https://via.placeholder.com/150" }} // Replace with the user's profile image URL
+            source={{ uri: "https://via.placeholder.com/150" }}
             className="w-24 h-24 rounded-full mb-4"
           />
-          <Text className="text-white text-lg font-semibold">Denuyel</Text>
+          <Text className="text-white text-lg font-semibold">
+            {loading ? "Loading..." : username || "No username"}
+          </Text>
           <Text className="text-gray-400 text-sm text-center mt-1">
             2972 Westheimer Rd. Santa Ana, Illinois 85486
           </Text>
@@ -33,9 +62,8 @@ const ProfileScreen = () => {
             <Feather name="edit" size={16} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-
         {/* Profile Menu */}
-        <View className="bg-[#1E293B]  rounded-lg divide-y divide-gray-700">
+        <View className="bg-[#1E293B] rounded-lg divide-y divide-gray-700">
           {/* History */}
           <TouchableOpacity className="flex-row items-center justify-between px-4 py-4">
             <View className="flex-row items-center">

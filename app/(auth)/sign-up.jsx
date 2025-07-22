@@ -4,14 +4,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Dimensions,
   Alert,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { auth } from "../../firebaseconfig"; 
+import { auth, db } from "../../firebaseconfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUpScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -20,15 +20,24 @@ const SignUpScreen = () => {
   const [password, setPassword] = useState('');
 
   const handleSignUp = async () => {
-    if (!email || !password) {
+    if (!email || !password || !username) {
       Alert.alert("Missing Info", "Please enter all fields");
       return;
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User signed up");
-      router.push("/home"); // Navigate to home after signup
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Save additional user info in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+        email: user.email,
+        createdAt: new Date()
+      });
+
+      console.log("User signed up and data saved to Firestore");
+      router.push("/home");
     } catch (error) {
       console.error("Signup error:", error.message);
       Alert.alert("Signup Error", error.message);
@@ -37,7 +46,7 @@ const SignUpScreen = () => {
 
   return (
     <View className="flex-1 bg-primary px-6 pt-12">
-      {/* Header: Login & Sign Up Tabs */}
+      {/* Tabs */}
       <View className="flex-row justify-center mb-10 pt-10">
         <TouchableOpacity 
           className="px-8 py-3 rounded-lg"
@@ -50,6 +59,7 @@ const SignUpScreen = () => {
         </TouchableOpacity>
       </View>
 
+      {/* Headings */}
       <Text className="text-center text-white text-2xl font-sfsemibold mb-2">
         Create an account
       </Text>
@@ -57,7 +67,7 @@ const SignUpScreen = () => {
         Create your new account and find more service
       </Text>
 
-      {/* Username Input */}
+      {/* Username */}
       <View className="mb-6">
         <Text className="text-white font-sfregular mb-2">User name</Text>
         <TextInput
@@ -69,7 +79,7 @@ const SignUpScreen = () => {
         />
       </View>
 
-      {/* Email Input */}
+      {/* Email */}
       <View className="mb-6">
         <Text className="text-white font-sfregular mb-2">Email</Text>
         <TextInput
@@ -83,7 +93,7 @@ const SignUpScreen = () => {
         />
       </View>
 
-      {/* Password Input */}
+      {/* Password */}
       <View className="mb-6">
         <Text className="text-white font-sfregular mb-2">Password</Text>
         <View className="flex-row items-center justify-between bg-[#1e293b] rounded-lg px-4 py-3">
@@ -108,26 +118,26 @@ const SignUpScreen = () => {
         </View>
       </View>
 
-      {/* Sign-Up Button */}
+      {/* Submit */}
       <TouchableOpacity onPress={handleSignUp} className="bg-secondary py-4 rounded-lg mb-8">
         <Text className="text-center text-white text-base font-sfsemibold">
           Sign up
         </Text>
       </TouchableOpacity>
 
-      {/* Or Separator */}
+      {/* Or separator */}
       <View className="flex-row items-center mb-8">
         <View className="flex-1 h-px bg-gray-500"></View>
         <Text className="text-gray-500 font-sfregular mx-4">Or</Text>
         <View className="flex-1 h-px bg-gray-500"></View>
       </View>
 
-      {/* Social Buttons */}
+      {/* Social */}
       <View className="flex-row justify-around mb-8">
-        <TouchableOpacity className="flex-row items-center justify-center bg-[#1e293b] py-3 px-4 rounded-lg">
+        <TouchableOpacity className="bg-[#1e293b] py-3 px-4 rounded-lg">
           <FontAwesome name="facebook" size={20} color="#3b5998" />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center justify-center bg-[#1e293b] py-3 px-4 rounded-lg">
+        <TouchableOpacity className="bg-[#1e293b] py-3 px-4 rounded-lg">
           <FontAwesome name="google" size={20} color="#DB4437" />
         </TouchableOpacity>
       </View>

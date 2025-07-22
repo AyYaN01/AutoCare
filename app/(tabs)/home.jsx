@@ -1,18 +1,64 @@
-import React from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { Feather, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import images from '../../assets/images';
 import { router } from "expo-router";
-
+import { auth } from "../../firebaseconfig";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebaseconfig";
 
 const Home = () => {
+  const [username, setUsername] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          setUsername(userDoc.data().username);
+        } else {
+          console.log("User document does not exist.");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsername();
+  }, []);
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-primary">
+        <ActivityIndicator size="large" color="#ffffff" />
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 bg-primary px-4 pt-10">
-      {/* Greeting Header */}
       <View className="flex-row items-center justify-between mb-4">
         <View>
           <Text className="text-white text-lg font-sfregular">Welcome,</Text>
-          <Text className="text-white text-2xl font-sfsemibold">Ayo</Text>
+          <Text className="text-white text-lg font-semibold">
+            {username || "No username"}
+          </Text>
         </View>
         <TouchableOpacity>
           <MaterialCommunityIcons name="bell-outline" size={28} color="#ffffff" />
@@ -23,7 +69,7 @@ const Home = () => {
       <View className="flex-row items-center bg-[#1e293b] rounded-lg px-4 py-2 mb-6">
         <Feather name="search" size={20} color="#737373" />
         <TextInput
-          placeholder="Find your need service..."
+          placeholder="Find your needed service..."
           placeholderTextColor="#737373"
           className="text-white flex-1 ml-2"
         />
@@ -41,7 +87,7 @@ const Home = () => {
         </TouchableOpacity>
         <View className="absolute right-4 top-4 flex-row">
           <Image
-            source={images.discount} // Replace with image URL
+            source={images.discount}
             className="w-24 h-24 rounded-full"
           />
         </View>
@@ -63,7 +109,6 @@ const Home = () => {
       <Text className="text-white text-xl font-sfsemibold mb-4">Vehicle Services</Text>
       <ScrollView>
         <View className="flex-row flex-wrap justify-between">
-          {/* Example Service Card */}
           {[
             { title: "Repair Service", icon: "tools", key: "repair" },
             { title: "Flat Tyre Service", icon: "car", key: "flat" },
@@ -75,7 +120,7 @@ const Home = () => {
             <TouchableOpacity
               key={service.key}
               className="bg-[#1e293b] rounded-lg w-[48%] mb-4 p-4"
-              onPress={()=> router.push('../services/repair')}
+              onPress={() => router.push('../services/repair')}
             >
               <MaterialCommunityIcons
                 name={service.icon}
@@ -84,7 +129,7 @@ const Home = () => {
                 className="mb-2"
               />
               <Text className="text-white text-base font-sfsemibold">{service.title}</Text>
-              <Text className="text-gray-500 text-sm mt-1font-sfregular">24/7</Text>
+              <Text className="text-gray-500 text-sm mt-1 font-sfregular">24/7</Text>
             </TouchableOpacity>
           ))}
         </View>
