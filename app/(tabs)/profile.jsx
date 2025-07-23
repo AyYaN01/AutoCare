@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, Switch, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image, Switch, ScrollView, Alert } from "react-native";
 import { AntDesign, Feather, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { auth } from  "../../firebaseconfig"; // Make sure path is correct
+import { useNavigation } from "@react-navigation/native";
+import LoginScreen from "../(auth)/sign-in";
+import { getAuth, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from  "../../firebaseconfig"; // Make sure path is correct
+import { auth, db } from "../../firebaseconfig";
+import { router } from "expo-router";
 
 const ProfileScreen = () => {
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   const toggleNotificationSwitch = () => setIsNotificationEnabled(prev => !prev);
 
@@ -36,6 +40,26 @@ const ProfileScreen = () => {
     fetchUsername();
   }, []);
 
+  const handleLogout = () => {
+    Alert.alert("Logout", "Are you sure you want to log out?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: () => {
+          signOut(auth)
+            .then(() => {
+              router.replace("sign-in"); // Use navigation.navigate if using stack
+            })
+            .catch((error) => {
+              console.error("Logout error:", error);
+              Alert.alert("Error", "Failed to log out.");
+            });
+        },
+      },
+    ]);
+  };
+
   return (
     <View className="flex-1 bg-primary px-1 pt-10">
       <View className="flex-row items-center mb-6">
@@ -62,9 +86,9 @@ const ProfileScreen = () => {
             <Feather name="edit" size={16} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
+
         {/* Profile Menu */}
         <View className="bg-[#1E293B] rounded-lg divide-y divide-gray-700">
-          {/* History */}
           <TouchableOpacity className="flex-row items-center justify-between px-4 py-4">
             <View className="flex-row items-center">
               <FontAwesome5 name="history" size={20} color="#22C55E" />
@@ -73,7 +97,6 @@ const ProfileScreen = () => {
             <AntDesign name="right" size={18} color="#FFFFFF" />
           </TouchableOpacity>
 
-          {/* Notification */}
           <View className="flex-row items-center justify-between px-4 py-4">
             <View className="flex-row items-center">
               <Feather name="bell" size={20} color="#F59E0B" />
@@ -87,7 +110,6 @@ const ProfileScreen = () => {
             />
           </View>
 
-          {/* Settings */}
           <TouchableOpacity className="flex-row items-center justify-between px-4 py-4">
             <View className="flex-row items-center">
               <Feather name="settings" size={20} color="#3B82F6" />
@@ -96,7 +118,6 @@ const ProfileScreen = () => {
             <AntDesign name="right" size={18} color="#FFFFFF" />
           </TouchableOpacity>
 
-          {/* Support */}
           <TouchableOpacity className="flex-row items-center justify-between px-4 py-4">
             <View className="flex-row items-center">
               <MaterialIcons name="support-agent" size={20} color="#F59E0B" />
@@ -105,8 +126,11 @@ const ProfileScreen = () => {
             <AntDesign name="right" size={18} color="#FFFFFF" />
           </TouchableOpacity>
 
-          {/* Logout */}
-          <TouchableOpacity className="flex-row items-center justify-between px-4 py-4">
+          {/* 🚪 Logout Button */}
+          <TouchableOpacity
+            onPress={handleLogout}
+            className="flex-row items-center justify-between px-4 py-4"
+          >
             <View className="flex-row items-center">
               <AntDesign name="logout" size={20} color="#EF4444" />
               <Text className="text-white text-base font-medium ml-4">Logout</Text>
