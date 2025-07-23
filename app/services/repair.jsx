@@ -7,14 +7,23 @@ import {
   TextInput,
   ScrollView,
   Pressable,
+  Alert,
 } from "react-native";
 import {
   AntDesign,
   MaterialIcons,
   FontAwesome5,
   Feather,
+  Ionicons,
 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import {
+  launchCameraAsync,
+  launchImageLibraryAsync,
+  requestCameraPermissionsAsync,
+  requestMediaLibraryPermissionsAsync,
+  MediaTypeOptions,
+} from "expo-image-picker";
 import images from "../../assets/images";
 
 const RepairServiceScreen = () => {
@@ -23,6 +32,49 @@ const RepairServiceScreen = () => {
   const [needsParts, setNeedsParts] = useState(false);
   const [location, setLocation] = useState("");
   const [vehicleModel, setVehicleModel] = useState("");
+  const [imageUri, setImageUri] = useState(null);
+
+  const pickImageFromGallery = async () => {
+    const { status } = await requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission Denied", "Please grant media library access.");
+      return;
+    }
+
+    const result = await launchImageLibraryAsync({
+      mediaTypes: MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const takePhotoWithCamera = async () => {
+    const { status } = await requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission Denied", "Please grant camera access.");
+      return;
+    }
+
+    const result = await launchCameraAsync({
+      mediaTypes: MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const handleFabPress = () => {
+    Alert.alert("Choose Image Source", "Select one:", [
+      { text: "📷 Camera", onPress: takePhotoWithCamera },
+      { text: "🖼️ Gallery", onPress: pickImageFromGallery },
+      { text: "Cancel", style: "cancel" },
+    ]);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#0F172A", paddingTop: 40, paddingHorizontal: 16 }}>
@@ -66,6 +118,20 @@ const RepairServiceScreen = () => {
             <Text style={{ color: "#FFFFFF", fontSize: 18, fontWeight: "bold" }}>$100</Text>
           </View>
         </View>
+
+        {/* Selected image preview (if any) */}
+        {imageUri && (
+          <Image
+            source={{ uri: imageUri }}
+            style={{
+              width: "100%",
+              height: 200,
+              borderRadius: 12,
+              marginBottom: 24,
+            }}
+            resizeMode="cover"
+          />
+        )}
 
         {/* Service Description */}
         <View style={{ marginBottom: 24 }}>
@@ -182,7 +248,7 @@ const RepairServiceScreen = () => {
             backgroundColor: "#EF4444",
             borderRadius: 10,
             paddingVertical: 14,
-            marginBottom: 30,
+            marginBottom: 100, // leave space for FAB
           }}
           onPress={() => router.push("../payment/payment")}
         >
@@ -191,6 +257,26 @@ const RepairServiceScreen = () => {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        onPress={handleFabPress}
+        style={{
+          position: "absolute",
+          bottom: 24,
+          right: 24,
+          backgroundColor: "#EF4444",
+          padding: 16,
+          borderRadius: 999,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
+          elevation: 5,
+        }}
+      >
+        <Ionicons name="camera" size={24} color="#FFFFFF" />
+      </TouchableOpacity>
     </View>
   );
 };
