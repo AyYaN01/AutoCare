@@ -39,10 +39,7 @@ const ProfileScreen = () => {
   return (
     <View className="flex-1 bg-primary px-1 pt-10">
       <View className="flex-row items-center mb-6">
-        <TouchableOpacity>
-          <AntDesign name="arrowleft" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text className="text-white text-xl font-semibold ml-4">Profile</Text>
+        <Text className="text-white text-5xl font-semibold ml-4 mt-4">Profile</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -51,7 +48,7 @@ const ProfileScreen = () => {
             source={{ uri: "https://via.placeholder.com/150" }}
             className="w-24 h-24 rounded-full mb-4"
           />
-          <Text className="text-white text-lg font-semibold">
+          <Text className="text-white text-3xl font-semibold">
             {loading ? "Loading..." : username || "No username"}
           </Text>
           <Text className="text-gray-400 text-sm text-center mt-1">

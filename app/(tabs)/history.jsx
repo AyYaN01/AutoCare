@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { AntDesign, Feather, FontAwesome5 } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 const HistoryScreen = () => {
   const historyData = [
@@ -15,10 +16,8 @@ const HistoryScreen = () => {
     <View className="flex-1 bg-[#0F172A] px-4 pt-10">
       {/* Header */}
       <View className="flex-row items-center mb-6">
-        <TouchableOpacity>
-          <AntDesign name="arrowleft" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text className="text-white text-xl font-semibold ml-4">History</Text>
+      
+        <Text className="text-white text-5xl font-semibold ml-4 mt-4">History</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>

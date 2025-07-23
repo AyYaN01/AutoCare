@@ -99,10 +99,10 @@ const Home = () => {
           <FontAwesome name="briefcase" size={24} color="white" />
           <Text className="text-white mt-2 font-sfregular">Services</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="flex-1 bg-[#1e293b] rounded-lg items-center py-3 ml-2">
+        {/* <TouchableOpacity className="flex-1 bg-[#1e293b] rounded-lg items-center py-3 ml-2">
           <Feather name="shopping-cart" size={24} color="white" />
           <Text className="text-white mt-2 font-sfregular">Selling</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Vehicle Services */}
